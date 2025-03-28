@@ -25,7 +25,7 @@ jobs:
         run: 'cmake --build build-${{ matrix.target }} --config Debug'
 
       - name: run demo_map
-        run: 'build-${{ matrix.target }}\demo_map.exe'
+        run: '& build-${{ matrix.target }}\demo_map.exe'
 
   build-demo_list:
     strategy:
@@ -49,4 +49,4 @@ jobs:
         run: 'cmake --build build-${{ matrix.target }} --config Debug'
 
       - name: run demo_list
-        run: 'build-${{ matrix.target }}\demo_list.exe'
+        run: '& build-${{ matrix.target }}\demo_list.exe'
