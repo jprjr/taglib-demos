@@ -3,15 +3,11 @@ name: build
 on: [push]
 
 jobs:
-  build-windows:
+  build-demo_map:
     strategy:
       matrix:
         target:
-          - 'x86-windows'
           - 'x64-windows'
-        demo:
-          - 'demo_map'
-          - 'demo_list'
 
     runs-on: windows-latest
 
@@ -23,11 +19,35 @@ jobs:
         run: vcpkg install taglib:${{ matrix.target }}
 
       - name: configure ${{ matrix.target }}
-        run: 'cmake -B build-${{ matrix.target }} -DCMAKE_BUILD_TYPE=Debug -DVCPKG_TARGET_TRIPLET=${{ matrix.target }} -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -S ${{ matrix.demo }}'
+        run: 'cmake -B build-${{ matrix.target }} -DCMAKE_BUILD_TYPE=Debug -DVCPKG_TARGET_TRIPLET=${{ matrix.target }} -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -S demo_map'
 
       - name: build ${{ matrix.target }}
         run: 'cmake --build build-${{ matrix.target }} --config Debug'
 
-      - name: run ${{ matrix.demo }}
-        run: 'build-${{ matrix.target }}\${{ matrix.demo }}.exe'
+      - name: run demo_map
+        run: 'build-${{ matrix.target }}\demo_map.exe'
 
+  build-demo_list:
+    strategy:
+      matrix:
+        target:
+          - 'x86-windows'
+          - 'x64-windows'
+
+    runs-on: windows-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: install dependencies
+        run: vcpkg install taglib:${{ matrix.target }}
+
+      - name: configure ${{ matrix.target }}
+        run: 'cmake -B build-${{ matrix.target }} -DCMAKE_BUILD_TYPE=Debug -DVCPKG_TARGET_TRIPLET=${{ matrix.target }} -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -S demo_list'
+
+      - name: build ${{ matrix.target }}
+        run: 'cmake --build build-${{ matrix.target }} --config Debug'
+
+      - name: run demo_list
+        run: 'build-${{ matrix.target }}\demo_list.exe'
